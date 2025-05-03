@@ -4,6 +4,7 @@ import {
     LuTrendingUp,
     LuTrendingDown,
     LuTrash2,
+    LuPencil, // Add this import for the edit icon
 } from "react-icons/lu";
 
 
@@ -14,7 +15,8 @@ export default function TransactionInfoCard({
     amount,
     type,
     hideDelteBtn,
-    onDelete
+    onDelete,
+    onEdit, // Add this prop for handling edit action
 }) {
     const getAmountStyles = () =>{
         return type === "income"? "bg-green-50 text-green-500": "bg-red-50 text-red-500"
@@ -37,14 +39,22 @@ return (
             <p className='text-xs text-gray-400 mt-1'>{date}</p>
         </div>
 
-        {/* Delete Button */}
+        {/* Action Buttons (Edit & Delete) */}
         {!hideDelteBtn && (
-            <button 
-                className='text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
-                onClick={onDelete}
-            >
-                <LuTrash2 size={18} />
-            </button>
+            <div className="flex items-center gap-2">
+                <button 
+                    className='text-gray-400 hover:text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
+                    onClick={onEdit}
+                >
+                    <LuPencil size={18} />
+                </button>
+                <button 
+                    className='text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer'
+                    onClick={onDelete}
+                >
+                    <LuTrash2 size={18} />
+                </button>
+            </div>
         )}
         
         {/* Amount Section */}
