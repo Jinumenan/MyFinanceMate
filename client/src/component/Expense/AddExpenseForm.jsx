@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Input from '../Inputs/input'
 import EmojiPickerPopup from '../EmojiPickerPopup'
-
+import { toast } from 'react-toastify'
 
 export default function AddExpenseForm({onAddExpense}) {
 
@@ -11,8 +11,53 @@ export default function AddExpenseForm({onAddExpense}) {
     date:"",
     icon:""
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (key, value) => setIncome({...income, [key]: value});
+  
+  const validateForm = () => {
+    if (!income.category) {
+      toast.error("Please enter a category");
+      return false;
+    }
+    if (!income.amount || income.amount <= 0) {
+      toast.error("Please enter a valid amount");
+      return false;
+    }
+    if (!income.date) {
+      toast.error("Please select a date");
+      return false;
+    }
+    if (!income.icon) {
+      toast.error("Please select an icon");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      await onAddExpense(income);
+      toast.success("Expense added successfully!");
+      
+      // Reset form
+      setIncome({
+        category: "",
+        amount: "",
+        date: "",
+        icon: ""
+      });
+    } catch (error) {
+      toast.error(error.message || "Failed to add expense. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -48,9 +93,10 @@ export default function AddExpenseForm({onAddExpense}) {
         <button
           type='button'
           className='add-btn add-btn-fill'
-          onClick={() =>onAddExpense(income)}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
         >
-          Add Expense
+          {isSubmitting ? 'Adding...' : 'Add Expense'}
         </button>
       </div>
     </div>
