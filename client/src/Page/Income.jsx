@@ -92,7 +92,34 @@ export default function Income() {
     }
 
     // download income details
-    const handleDownloadIncomDetails = async () =>{};
+    const handleDownloadIncomDetails = async () => {
+        try {
+            const response = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, {
+                responseType: 'blob'
+            });
+            
+            // Create a URL for the blob
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'income_details.csv'); // or .pdf, .xlsx depending on your API
+            
+            // Append to body, click and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            toast.success("Income details downloaded successfully");
+        } catch (error) {
+            console.error(
+                "Error downloading income details:",
+                error.response?.data?.message || error.message
+            );
+            toast.error("Failed to download income details");
+        }
+    };
 
     useEffect(() => {
         fetchIncomedetails();
