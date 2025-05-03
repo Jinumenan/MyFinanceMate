@@ -20,37 +20,42 @@ export default function Income() {
         data: null,
     });
 
-    const [openAddIncomeModel, setOpenAddincomeModel] = useState(false)
+    const [openAddIncomeModel, setOpenAddincomeModel] = useState(false);
+    const [currentIncome, setCurrentIncome] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
-    // get all inome
+    // get all income
     const fetchIncomedetails = async() =>{ 
-    // if (loading) return;
-    setLoading(true);
+        // if (loading) return;
+        setLoading(true);
 
-    try {
-        setLoading(true)
-        const response = await axiosInstance.get(`${API_PATHS.INCOME.GET_INCOME}`);
+        try {
+            setLoading(true)
+            const response = await axiosInstance.get(`${API_PATHS.INCOME.GET_INCOME}`);
 
-        if (response.data) {
-            setIncomeData(response.data);
+            if (response.data) {
+                setIncomeData(response.data);
+            }
+        } catch (error) {
+            console.log("something went wrong, please try again", error);
+        } finally {
+            setLoading(false);
         }
-    } catch (error) {
-        console.log("something went wrong, please try again", error);
-    }finally{
-        setLoading(false);
-    }
     }
 
-    //add income
-    const handleAddIncome = async (income) =>{
+    // Add/Update income
+    const handleAddIncome = async (income) => {
         const {source, amount, date, icon} = income;
+        console.log("handleAddIncome called with:", income);
+        console.log("Current editing state:", { isEditing, currentIncomeId: currentIncome?._id });
 
         if (!source.trim()) {
-            toast.error("source is required.")
+            toast.error("Source is required.")
+            return;
         }
 
         if (!amount || isNaN(amount) || Number(amount) <= 0){
-            toast.error("amount should be a valid number greater than 0")
+            toast.error("Amount should be a valid number greater than 0")
             return;
         }
 
@@ -60,38 +65,86 @@ export default function Income() {
         }
 
         try {
-            await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME,{
-                source,
-                amount,
-                date,
-                icon,
-            });
-
+            if (isEditing && currentIncome && currentIncome._id) {
+                console.log(`Updating income with ID: ${currentIncome._id}`);
+                
+                // Make sure this path is using API_PATHS and not hardcoded
+                const updateUrl = API_PATHS.INCOME.UPDATE_INCOME(currentIncome._id);
+                console.log("Update URL being used:", updateUrl);
+                
+                const response = await axiosInstance.put(updateUrl, {
+                    source,
+                    amount,
+                    date,
+                    icon,
+                });
+                
+                console.log("Update response:", response);
+                toast.success("Income updated successfully");
+            } else {
+                await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, {
+                    source,
+                    amount,
+                    date,
+                    icon,
+                });
+                toast.success("Income added successfully");
+            }
+            
             setOpenAddincomeModel(false);
-            toast.success("income added successfully");
+            setIsEditing(false);
+            setCurrentIncome(null);
             fetchIncomedetails();
         } catch (error) {
-            "error adding income",
-            error.response?.data?.message || error.message
+            console.error("Error in handleAddIncome:", error);
+            console.error("Full request URL:", error.config?.url);
+            toast.error(
+                isEditing 
+                    ? "Error updating income" 
+                    : "Error adding income"
+            );
         }
     }
 
-    //delete income
+    // Handle edit income
+    const handleEditIncome = async (id) => {
+        try {
+            console.log("Edit clicked for ID:", id);
+            // Find the income to edit
+            const incomeToEdit = incomeData.find(income => income._id === id);
+            
+            if (incomeToEdit) {
+                console.log("Found income to edit:", incomeToEdit);
+                // Set editing state variables
+                setCurrentIncome(incomeToEdit);
+                setIsEditing(true);
+                setOpenAddincomeModel(true);
+            } else {
+                console.error("Income not found with ID:", id);
+                toast.error("Income not found");
+            }
+        } catch (error) {
+            console.error("Error in handleEditIncome:", error);
+            toast.error("Failed to prepare income for editing");
+        }
+    }
+
+    // Delete income
     const deleteIncome = async (id) => {
         try {
             await axiosInstance.delete(API_PATHS.INCOME.DELETE_INCOME(id));
             setOpenDeleteAlert({show: false, data: null});
-            toast.success("Income delails deleted successfully");
+            toast.success("Income details deleted successfully");
             fetchIncomedetails();
         } catch (error) {
             console.error(
                 "Error deleting income:",
                 error.response?.data?.message || error.message
-            )
+            );
         }
     }
 
-    // download income details
+    // Download income details
     const handleDownloadIncomDetails = async () => {
         try {
             const response = await axiosInstance.get(API_PATHS.INCOME.DOWNLOAD_INCOME, {
@@ -117,44 +170,57 @@ export default function Income() {
                 "Error downloading income details:",
                 error.response?.data?.message || error.message
             );
-            toast.error("Failed to download income details");
         }
     };
 
+    // Reset form when closing modal
+    const handleCloseModal = () => {
+        setOpenAddincomeModel(false);
+        setIsEditing(false);
+        setCurrentIncome(null);
+    }
+
     useEffect(() => {
         fetchIncomedetails();
-
         return () => {};
     }, []);
 
-  return (
-    <div className='w-auto h-auto font-serif'>
-        <div className='mt-4'><Navbar/></div>
-        <div activeMenu = "Income">
-            <div className='my-5 mx-auto'>
-                <div className='grid drid-cols-1 gap-6'>
-                    <div className=''>
-                        <IncomeOverview
-                            transactions = {incomeData}
-                            onAddIncome = {() => setOpenAddincomeModel(true)}
-                        />
+    return (
+        <div className='w-auto h-auto font-serif'>
+            <div className='mt-4'><Navbar/></div>
+            <div activeMenu="Income">
+                <div className='my-5 mx-auto'>
+                    <div className='grid drid-cols-1 gap-6'>
+                        <div className=''>
+                            <IncomeOverview
+                                transactions={incomeData}
+                                onAddIncome={() => {
+                                    setIsEditing(false);
+                                    setCurrentIncome(null);
+                                    setOpenAddincomeModel(true);
+                                }}
+                            />
                         </div>
                         <IncomeList
-                            transactions = {incomeData}
-                            onDelete = {(id) => {
+                            transactions={incomeData}
+                            onDelete={(id) => {
                                 setOpenDeleteAlert({show: true, data: id});
                             }}
-                            onDownload = {handleDownloadIncomDetails}
+                            onDownload={handleDownloadIncomDetails}
+                            onEdit={handleEditIncome}
                         />
                     </div>
                     
                     <Modal
-                        isOpen = {openAddIncomeModel}
-                        onClose = {() => setOpenAddincomeModel(false)}
-                        title = "Add Income"
+                        isOpen={openAddIncomeModel}
+                        onClose={handleCloseModal}
+                        title={isEditing ? "Edit Income" : "Add Income"}
                     >
-                        {/* <div>Add Income Form</div> */}
-                        <AddIncomeform onAddIncome = {handleAddIncome}/>
+                        <AddIncomeform 
+                            onAddIncome={handleAddIncome}
+                            initialData={currentIncome}
+                            isEditing={isEditing}
+                        />
                     </Modal>
                     <Modal
                         isOpen={opeanDeleteAlert.show}
@@ -162,13 +228,12 @@ export default function Income() {
                         title="Delete Income"
                         >
                         <DeleteAlert
-                            content = "Are you sure you want to delete this in come"
-                            onDelete = {() => deleteIncome(opeanDeleteAlert.data)}
+                            content="Are you sure you want to delete this income"
+                            onDelete={() => deleteIncome(opeanDeleteAlert.data)}
                         />
                     </Modal>
+                </div>
             </div>
         </div>
-    </div>
-
-  )
+    );
 }
