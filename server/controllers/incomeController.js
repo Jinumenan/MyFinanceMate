@@ -2,7 +2,6 @@ const xlsx = require('xlsx');
 const Income = require('../models/Income');
 
 //add income source
-
 exports.addIncome = async (req, res) => {
     const userId = req.user.id;
 
@@ -54,7 +53,6 @@ exports.deleteIncome = async (req, res) => {
 }
 
 //download income source in excel format
-
 exports.downloadIncomeExcel = async (req, res) => {
     const userId = req.user.id;
     try {
@@ -75,6 +73,42 @@ exports.downloadIncomeExcel = async (req, res) => {
     }catch(error){
         res.status(500).json({ message: "server error" });
     }
+}
 
+// Update income source
+exports.updateIncome = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { icon, source, amount, date } = req.body;
+        
+        // Validate required fields
+        if (!source || !amount || !date) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
 
+        // Find income by ID and verify it belongs to the current user
+        const income = await Income.findById(req.params.id);
+        
+        if (!income) {
+            return res.status(404).json({ message: "Income record not found" });
+        }
+        
+        // Optional: Verify income belongs to current user
+        if (income.userId.toString() !== userId) {
+            return res.status(401).json({ message: "Not authorized to update this income" });
+        }
+        
+        // Update the income
+        income.source = source;
+        income.amount = amount;
+        income.date = new Date(date);
+        income.icon = icon;
+        
+        await income.save();
+        
+        res.status(200).json(income);
+    } catch (error) {
+        console.error("Error updating income:", error);
+        res.status(500).json({ message: "Server error" });
+    }
 }

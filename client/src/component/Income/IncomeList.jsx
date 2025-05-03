@@ -3,7 +3,7 @@ import { LuDownload } from 'react-icons/lu'
 import TransactionInfoCard from '../Cards/TransactionInfoCard'
 import moment from 'moment'
 
-export default function IncomeList({transactions, onDelete, onDownload}) {
+export default function IncomeList({transactions, onDelete, onDownload, onEdit}) {
   return (
     <div className='card'>
         <div className="flex items-center justify-between">
@@ -23,7 +23,8 @@ export default function IncomeList({transactions, onDelete, onDownload}) {
                     date={moment(income.date).format("Do MMM YYYY")}
                     amount={income.amount}
                     type="income"
-                    onDelete = {() => onDelete(income._id)}
+                    onDelete={() => onDelete(income._id)}
+                    onEdit={() => onEdit(income._id)}
                 />
             ))}
         </div>
