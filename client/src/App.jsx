@@ -9,6 +9,9 @@ import UserProvider from "./context/UserContext";
 import Income from "./Page/Income";
 import Expense from "./Page/Expense";
 import ViewTransaction from "./Page/ViewTransaction";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
 // import Income from "./Page/Income";
 
 
@@ -30,6 +33,8 @@ function App() {
             <Route path="*" element={<Navigate replace to="/signin" />} />
           </Routes>
         </BrowserRouter>
+        <ToastContainer position="top-right" autoClose={3000} />
+        <Toaster position="top-right" />
       </div>
     </UserProvider>
   );
