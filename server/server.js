@@ -6,6 +6,8 @@ const connectDB = require("./config/db");
 const incomeRoutes = require("./routes/incomeRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const dashboardRoutes = require("./routes/DashboardRoutes");
+
+const voiceRoutes = require('./routes/VoiceRoutes');
 const app = express();
 const path = require("path");
 
@@ -24,6 +26,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/income", incomeRoutes)
 app.use("/api/v1/expense", expenseRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
+
+app.use('/api/v1/voice', voiceRoutes);
 
 //server uploads folders 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

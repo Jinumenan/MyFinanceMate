@@ -9,6 +9,7 @@ import UserProvider from "./context/UserContext";
 import Income from "./Page/Income";
 import Expense from "./Page/Expense";
 import ViewTransaction from "./Page/ViewTransaction";
+import Message from "./Page/Message";
 // import Income from "./Page/Income";
 
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="/income" exact element = {<Income/>} />
             <Route path="/expense" exact element = {<Expense/>} />
             <Route path="/viewtransaction" exact element = {<ViewTransaction/>} />
+            <Route path="/message" exact element = {<Message/>} />
             <Route path="*" element={<Navigate replace to="/signin" />} />
           </Routes>
         </BrowserRouter>

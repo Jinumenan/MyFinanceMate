@@ -28,5 +28,14 @@ export const API_PATHS = {
         UPLOAD_IMAGE: "/api/v1/auth/upload-image",
 
     },
+    VOICE: {
+        CREATE: "/api/v1/voice/create",
+        GET_ALL_VOICE:"/api/v1/voice/get",
+        GET_MESSAGE_BY_ID:"/api/v1/voice/:id",
+        READ:"/api/v1/voice/:id/read",
+        UNREAD:"/api/v1/voice/:id/unread",
+        DELETE:"/api/v1/voice/:id"
+      }
+      
     
 };

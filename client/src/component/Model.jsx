@@ -1,7 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { API_PATHS } from '../Utils/apiPath';
+import axiosInstance from '../Utils/axiosinstance';
 
-export default function Modal({children, isOpen, onClose, title}) {
-
+export default function Modal({children, isOpen, onClose, title, messages = [], onUpdate}) {
+    const [latestUnread, setLatestUnread] = useState(null);
+    const [checked, setChecked] = useState(false);
+  
+    useEffect(() => {
+      if (messages.length > 0) {
+        const unread = messages.find(msg => !msg.read);
+        setLatestUnread(unread);
+      }
+    }, [messages]);
+  
+    const handleCheckboxChange = async () => {
+      if (!latestUnread) return;
+  
+      setChecked(true);
+  
+      try {
+        await axiosInstance.patch(
+          API_PATHS.VOICE.READ.replace(":id", latestUnread._id)
+        );
+        if (onUpdate) onUpdate(); // trigger refresh
+      } catch (error) {
+        console.error("Error marking as read:", error);
+      }
+    };
+  
     if(!isOpen) return null;
 
   return (
@@ -22,28 +48,27 @@ export default function Modal({children, isOpen, onClose, title}) {
                         onClick={onClose}
                     >
                         X
-                        {/* <svg
-                        className='w-3 h-3'
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 14"
-                    >
-                    <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="ml 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                    />
-                    </svg> */}
                     </button>
                 </div>
 
                 {/* body */}
                 <div className='p-4 md:p-5 space-y-4'>
-                    {children}
-                </div>
+                {latestUnread ? (
+              <>
+                <p className="text-gray-800">{latestUnread.message}</p>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-green-500"
+                  />
+                  <span className="text-gray-700">Mark as Read</span>
+                </label>
+              </>
+            ) : (
+              children || <p>No new messages</p>
+            )}                </div>
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from  "prop-types";
 import { UserContext } from '../context/UserContext'
 import { Link, useNavigate } from "react-router-dom";
+import NotificationBell from "../component/voice-input/NotificationBell";
 
 function Navbar(props) {
   const {user, clearUser} = useContext(UserContext)
@@ -43,10 +44,13 @@ function Navbar(props) {
 
         <div className="flex pl-[50px] justify-end">
             <nav className="md:ml-auto flex  items-center text-base justify-center">
+            <p className="pr-8"><NotificationBell /></p>
             <Link to='/dashboard' className="mr-5 hover:text-gray-900 ">Dashboard</Link>
             <Link to = '/income' className="mr-5 hover:text-gray-900">Income</Link>
             <Link to ='/expense' className="mr-5 hover:text-gray-900">Expenses</Link>
             <Link to = '/viewtransaction' className="mr-5 hover:text-gray-900">View Transaction</Link>
+            <Link to = '/message' className="mr-5 hover:text-gray-900">Message</Link>
+
             </nav>
          
             <button

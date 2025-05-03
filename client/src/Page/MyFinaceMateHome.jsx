@@ -1,6 +1,7 @@
 import React from 'react'
 import graph_1 from '../assets/graph_1.png'
 import graph_2 from '../assets/graph_2.png'
+import e3 from '../assets/e3.jpeg'
 import home1 from '../assets/Home2.jpg'
 import strategy from '../assets/strategy.png'
 import analysis2 from '../assets/analysis2.jpeg'
@@ -24,7 +25,7 @@ export default function MyFinaceMateHome() {
             </div>
 
             {/* get start */}
-            <div className='flex w-auto h-auto mb-20 bg-yellow-50 shadow-lg'>
+            <div className='flex w-auto ml-10 mr-10 h-auto mb-20 bg-yellow-50 shadow-lg'>
                 <div className='flex-1 flex-row pt-32 gap-10 pl-36'>
                     <h2 className='text-[40px] m-2 p-2 font-sans font-bold antialiased text-shadow-lg/30 '>Elevate Your Finance With <br />MYFinanceMate </h2>
                     <span className='text-lg pl-5 font-semibold font-sans'>Your Trusted Partner in Financial Success</span>
@@ -49,7 +50,7 @@ export default function MyFinaceMateHome() {
                         <div className='pl-48 pt-12'>
                             <h2 className='text-4xl mb-4 pl-4 font-sans font-bold antialiased '>Explore Our Services </h2>
                             <span className='text-sm pl-4 font-semibold font-sans'>Your Trusted Partner in Financial Success</span><br />
-                            <button className='bg-orange-100 w-auto h-[40px] rounded-md pl-14 m-4 pr-14 underline underline-offset-2'>View More</button>
+                            <button className='get-btn'>View More</button>
                         </div>
                     </div>
 
@@ -68,17 +69,19 @@ export default function MyFinaceMateHome() {
                 </div>
                 {/* right side */}
                 <div className='flex-1 w-auto h-auto ml-6 p-10'>
-                    <div className='w-[400px] h-[400px] m-14 ml-32 bg-black'></div>
+                    <div className='w-[400px] h-[400px] m-14 ml-32 rounded-lg shadow-xl mask-origin-border border-3 p-3.5 '>
+                    <img src={e3} /> 
+                    </div>
                 </div>
             </div>
 
             {/* latest inside */}
             <div className=' w-auto h-auto'>
-                <div className='pt-14'>
+                <div className=''>
                     <div className="flex flex-col items-center justify-center">
                         <h2 className="text-2xl font-bold mb-2">Latest Insights</h2>
                         <p className="text-gray-600 mb-4">Stay informed with our expert financial advice</p>
-                        <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Read More</button>
+                        <button className='get-btn'>Read More</button>
                     </div>
                 </div>
 
@@ -87,7 +90,7 @@ export default function MyFinaceMateHome() {
                         <div className='flex-col justify-evenly align-center' >
                             <div className='border border-light-100 w-auto h-auto mt-16'>
                                 <div className='flex flex-row m-2' >
-                                    <div className='bg-black w-[90px] h-[90px] '><img src={strategy} /></div>
+                                    <div className='bg-black w-[90px] h-[90px] '><img src={home1} /></div>
                                     <div className='mt-3'>
                                         <h2 className='text-2xl pl-4  font-sans font-bold antialiased '>Investment Strategies</h2>
                                         <span className=' pl-4 font-semibold font-sans text-wrap'>Learn how to maximize your investment.</span> <br />
@@ -95,15 +98,6 @@ export default function MyFinaceMateHome() {
                                 </div>
                             </div>
 
-                            {/* <div className='border border-light-100 w-auto h-auto mt-14'>
-                                <div className='flex flex-row m-2' >
-                                    <div className='bg-black w-[90px] h-[90px]'></div>
-                                    <div className='mt-3'>
-                                        <h2 className='text-2xl pl-4  font-sans font-bold antialiased '>Recent Updates </h2>
-                                        <span className='text-sm pl-4 font-semibold font-sans'>Stay informed with the latest news.</span> <br />
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                     <div className='pl-12'>
@@ -117,57 +111,13 @@ export default function MyFinaceMateHome() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className='border border-light-100 w-auto h-auto mt-14'>
-                                <div className='flex flex-row m-2' >
-                                    <div className='bg-black w-[90px] h-[90px]'></div>
-                                    <div className='mt-3'>
-                                        <h2 className='text-2xl pl-4  font-sans font-bold antialiased '>Recent Updates </h2>
-                                        <span className='text-sm pl-4 font-semibold font-sans'>Stay informed with the latest news.    </span>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* Recent Update */}
-            <div className='flex w-auto h-auto mt-4 bg-yellow-50'>
-                {/* right side */}
-                <div className='flex-row pl-20'>
-                    <div className='w-[400px] h-[400px] m-14 ml-56 rounded-lg shadow-lg mask-origin-border border-3 '>
-                    <img src={analysis2} />
-                    </div>
-                </div>
-                {/* left side */}
-                <div className='flex-1 w-auto h-auto'>
-                    <div className='flex-row w-auto h-auto ml-4'>
-                        <div className='pl-12 pt-20'>
-                            <h2 className='text-4xl mb-4 pl-4  font-sans font-bold antialiased '>Recent Updates </h2>
-                            <span className='text-sm pl-4 font-semibold font-sans'>Stay informed with the latest news.</span> <br />
-                            <button className='bg-orange-100 w-auto h-[40px] rounded-md pl-14 m-4 pr-14 underline underline-offset-4 '>Read More</button>
-                        </div>
-                    </div>
-
-                    <div className='flex flex-row mt-8'>
-                        <div className='m-2  ml-20'>
-                            <div src className='w-[150px] h-[150px] bg-white rounded-lg'>
-                                <img src={graph_1} />
-                            </div>
-
-                        </div>
-                        <div className='m-2'>
-                            <div src className='w-[150px] h-[150px] bg-white'>
-                                <img src={graph_2} alt="" />
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+ 
             {/* financial Articlies */}
-            <div className='w-auto h-auto mt-4 pb-20'>
+            <div className='w-auto h-auto mt-4 pb-20 bg-yellow-50/50 rounded-lg shadow-lg ml-10 mr-10'>
                 {/* up information */}
                 <div className='flex flex-row justify-center'>
                     <div className='flex flex-col pt-24 pr-12'>
@@ -175,12 +125,14 @@ export default function MyFinaceMateHome() {
                             <div className='' >
                                 <h2 className='text-4xl font-sans font-bold antialiased mb-4'>Financial Articlies </h2>
                                 <span className='text-sm font-semibold font-sans'>Stay informed with the latest news.</span> <br />
-                                <button className='bg-orange-100 w-auto h-[40px] rounded-md pl-14 pr-14 underline underline-offset-4 mt-4'>Read More</button>
+                                <button className='get-btn'>Read More</button>
                             </div>
                         </div>
                         <div className='border border-light-100 w-auto h-auto mt-24'>
                             <div className='flex flex-row m-2 ' >
-                                <div className='bg-black w-[90px] h-[90px]'></div>
+                                <div className=' w-[90px] h-[90px]'>
+                                <img src={graph_2}/>                                
+                                </div>
                                 <div className='mt-3'>
                                     <h2 className='text-2xl pl-4  font-sans font-bold antialiased '>Budgeting Tips  </h2>
                                     <span className='text-sm pl-4 font-semibold font-sans'>Learn how to create a budget thatworks for you.</span> <br />
@@ -190,7 +142,9 @@ export default function MyFinaceMateHome() {
                     </div>
                     <div className='flex flex-col pt-24 pl-4'>
                         <div className='w-auto h-auto pl-48'>
-                            <div className='bg-slate-950 w-[180px] h-[180px]'></div>
+                            <div className='bg-slate-950 w-[180px] h-[180px] rounded-lg shadow-lg'>
+                            <img src={analysis2} />
+                            </div>
                         </div>
                         <div className='border border-light-100 w-auto h-auto mt-14'>
                             <div className='flex felx-row m-2'>
@@ -204,6 +158,56 @@ export default function MyFinaceMateHome() {
                     </div>
                 </div>
             </div>
+
+            {/* contact Us */}
+
+            <div className='w-auto h-auto pb-10'>
+                <div className='flex'>
+                    <div className='flex-1 justify-items-center pb-40 pl-10'>
+                        <div className='w-auto h-auto pt-60'>
+                            <h2 className='text-[45px] mb-4 pl-4  font-sans font-bold antialiased '>Contact Us </h2>
+                            <span className='text-sm pl-4 font-semibold font-sans'>Reach out to us for any queries.</span><br/>
+                        </div>
+                    </div>
+                    <div className='flex-1  '>
+                            <div className='pt-20'>
+                                <div className='flex flex-col pr-60'>
+                                    <label className='m-3'>Name</label>
+                                    <input className=' outline-none border border-slate-300  p-2  rounded-md border-b-2'  
+                                        type="name" 
+                                        name= 'name'
+                                        placeholder='Name'
+                                        autocomplete="off" 
+                                    />
+                                </div>
+                                <div className='flex flex-col pr-60'>
+                                    <label className='m-3'>Email</label>
+                                    <input className=' outline-none border border-slate-300  p-2  rounded-md border-b-2'
+                                        type="Email"
+                                        name='Email'
+                                        placeholder='Email'
+                                        autocomplete="off" 
+                                    />
+                                </div>
+                                <div className='flex flex-col pr-60'>
+                                    <label className='m-3'>Message</label>
+                                    <input className=' outline-none border border-slate-300  p-2  rounded-md border-b-2 h-[100px]'
+                                        type="message"
+                                        name='message'
+                                        placeholder='message '
+                                        autocomplete="off" 
+                                    />
+                                </div>
+                                <div>
+                                    <button className='get-btn'>View More</button>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
         </div>
+        
     );
 }

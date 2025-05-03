@@ -16,6 +16,7 @@ import FinanceDverview from '../component/Dashboard/FinanceDverview';
 import Last30DaysExpenses from '../component/Dashboard/Last30DaysExpenses';
 import RecentIncomeWithChart from '../component/Dashboard/RecentIncomeWithChart';
 import RecentTransactions from '../component/Dashboard/RecentTransactions';
+import NotificationBell from '../component/voice-input/NotificationBell';
 
 export default function Dashboard() {
     const navigate = useNavigate()
@@ -61,6 +62,7 @@ export default function Dashboard() {
                     <div className='flex flex-row w-auto h-auto pl-20 pt-6 '>
                         {/* profile pic */}
                         <div>
+                        
                         {user?.profileImageUrl?(
                             <img
                                 src = {user?.profileImageUrl || ""}
@@ -84,6 +86,7 @@ export default function Dashboard() {
                     </div>
                     <div className=''>
                         <button className='bg-yellow-600/50 w-[100px] h-[40px] rounded-md mr-40 mt-[60px]'>Edit Profile</button>
+                        
                     </div>
                 </div>
             </div>
