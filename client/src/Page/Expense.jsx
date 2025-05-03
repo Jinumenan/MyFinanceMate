@@ -9,6 +9,7 @@ import Modal from '../component/Model';
 import ExpeseList from '../component/Expense/ExpeseList';
 import DeleteAlert from '../component/DeleteAlert';
 import Navbar from '../Footers/Navbar';
+import ExpenseLimitProgressBar from '../component/Expense/ExpenseLimitProgressBar';
 
 export default function Expense() {
   useUserAuth();
@@ -20,11 +21,41 @@ export default function Expense() {
   });
   const [openAddExpenseModel, setOpenAddExpenseModel] = useState(false);
   
+  // Add expense limit state
+  const [expenseLimit, setExpenseLimit] = useState(5000); // $5000 default limit
+  const [currentMonthTotal, setCurrentMonthTotal] = useState(0);
+  const [showLimitAlert, setShowLimitAlert] = useState(false);
+  
   // Fetch expenses on component mount
   useEffect(() => {
     fetchExpensedetails();
     return () => {};
   }, []);
+  
+  // Calculate total expenses for the current month
+  useEffect(() => {
+    const calculateMonthlyTotal = () => {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      
+      const monthlyExpenses = expenseData.filter(expense => {
+        const expenseDate = new Date(expense.date);
+        return expenseDate.getMonth() === currentMonth && 
+               expenseDate.getFullYear() === currentYear;
+      });
+      
+      const total = monthlyExpenses.reduce((sum, expense) => sum + Number(expense.amount), 0);
+      setCurrentMonthTotal(total);
+      
+      // Check if limit is exceeded
+      if (total > expenseLimit && !showLimitAlert) {
+        setShowLimitAlert(true);
+      }
+    };
+    
+    calculateMonthlyTotal();
+  }, [expenseData, expenseLimit]);
   
   // Get all expenses
   const fetchExpensedetails = async() => { 
@@ -72,6 +103,13 @@ export default function Expense() {
       
       setOpenAddExpenseModel(false);
       //toast.success("Expense added successfully");
+      
+      // Check if this expense will exceed the monthly limit
+      const newTotal = currentMonthTotal + Number(amount);
+      if (newTotal > expenseLimit && !showLimitAlert) {
+        setShowLimitAlert(true);
+      }
+      
       fetchExpensedetails();
     } catch (error) {
       console.error(
@@ -104,6 +142,9 @@ export default function Expense() {
   
   // Download expense details
   const handleDownloadExpenseDetails = async () => {
+    // Show loading toast
+    const loadingToastId = toast.loading("Generating expense report...");
+    
     try {
       const response = await axiosInstance.get(API_PATHS.EXPENSE.DOWNLOAD_EXPENSE, {
         responseType: "blob"
@@ -119,9 +160,14 @@ export default function Expense() {
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
       
+      // Dismiss loading toast and show success toast
+      toast.dismiss(loadingToastId);
+      toast.success("Expense report downloaded successfully!");
     } catch (error) {
+      // Dismiss loading toast and show error toast
+      toast.dismiss(loadingToastId);
       console.error("Error downloading expense details:", error);
-      toast.error("Failed to download expense details. Please try again");
+      toast.error("Failed to download expense report. Please try again.");
     }
   };
 
@@ -136,6 +182,14 @@ export default function Expense() {
               onExpenseIncome={() => setOpenAddExpenseModel(true)}
             />
           </div>
+        </div>
+
+        {/* Add the expense limit progress bar below the graph */}
+        <div className="mt-6 mb-6">
+          <ExpenseLimitProgressBar 
+            currentAmount={currentMonthTotal}
+            limitAmount={expenseLimit}
+          />
         </div>
 
         <ExpeseList
@@ -165,6 +219,29 @@ export default function Expense() {
             content="Are you sure you want to delete this Expense"
             onDelete={() => deleteExpense(opeanDeleteAlert.data)}
           />
+        </Modal>
+
+        {/* Monthly limit exceeded alert */}
+        <Modal
+          isOpen={showLimitAlert}
+          onClose={() => setShowLimitAlert(false)}
+          title="Monthly Expense Limit Exceeded!"
+        >
+          <div className="p-4 text-center">
+            <div className="text-red-500 mb-4 text-5xl">⚠️</div>
+            <h3 className="text-xl font-medium mb-2">Warning!</h3>
+            <p className="mb-6">You have exceeded your monthly expense limit of ${expenseLimit}.</p>
+            <p className="mb-6">Current monthly expenses: <span className="font-bold text-red-500">${currentMonthTotal.toFixed(2)}</span></p>
+            <p className="mb-2">Please consider reducing your expenses for the rest of the month.</p>
+            <div className="mt-6">
+              <button 
+                onClick={() => setShowLimitAlert(false)}
+                className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+              >
+                OK
+              </button>
+            </div>
+          </div>
         </Modal>
       </div>
     </div>

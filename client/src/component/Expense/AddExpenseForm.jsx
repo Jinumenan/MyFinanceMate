@@ -14,17 +14,43 @@ export default function AddExpenseForm({onAddExpense}) {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (key, value) => setIncome({...income, [key]: value});
+  // Modified handleChange to validate numeric input for amount and text input for category
+  const handleChange = (key, value) => {
+    if (key === 'amount') {
+      // Only allow numeric input for the amount field
+      const numericValue = value.replace(/[^0-9.]/g, '');
+      
+      // Ensure there's only one decimal point
+      const parts = numericValue.split('.');
+      if (parts.length > 2) {
+        const firstPart = parts[0];
+        const secondPart = parts.slice(1).join('');
+        setIncome({...income, [key]: `${firstPart}.${secondPart}`});
+        return;
+      }
+      
+      setIncome({...income, [key]: numericValue});
+    } else if (key === 'category') {
+      // Only allow text input for category (no numbers)
+      const textValue = value.replace(/[0-9]/g, '');
+      setIncome({...income, [key]: textValue});
+    } else {
+      setIncome({...income, [key]: value});
+    }
+  };
   
   const validateForm = () => {
     if (!income.category) {
       toast.error("Please enter a category");
       return false;
     }
-    if (!income.amount || income.amount <= 0) {
+    
+    // Additional validation for amount to ensure it's a valid number
+    if (!income.amount || isNaN(parseFloat(income.amount)) || parseFloat(income.amount) <= 0) {
       toast.error("Please enter a valid amount");
       return false;
     }
+    
     if (!income.date) {
       toast.error("Please select a date");
       return false;
@@ -42,7 +68,13 @@ export default function AddExpenseForm({onAddExpense}) {
     setIsSubmitting(true);
     
     try {
-      await onAddExpense(income);
+      // Convert amount to number before passing to parent
+      const expenseData = {
+        ...income,
+        amount: parseFloat(income.amount)
+      };
+      
+      await onAddExpense(expenseData);
       toast.success("Expense added successfully!");
       
       // Reset form
@@ -77,8 +109,9 @@ export default function AddExpenseForm({onAddExpense}) {
         value={income.amount}
         onChange={({target}) => handleChange("amount", target.value)}
         label="Amount"
-        placeholder=""
-        type="number"
+        placeholder="Enter numeric value only"
+        type="text" // Changed from "number" to "text" for better control
+        inputMode="decimal" // Suggests a decimal keypad on mobile
       />
 
       <Input

@@ -75,38 +75,6 @@ exports.downloadExpenseExcel = async (req, res) => {
     }catch(error){
         res.status(500).json({ message: "server error" });
     }
+
+
 }
-
-//update Expense source
-
-exports.updateExpense = async (req, res) => {
-    try {
-        const { category, amount, date, icon } = req.body;
-        const userId = req.user.id;
-        const expenseId = req.params.id;
-
-        // Validate input
-        if (!category || !amount || !date) {
-            return res.status(400).json({ message: "Please provide all required fields" });
-        }
-
-        // Find expense and ensure it belongs to the user
-        const expense = await Expense.findOne({ _id: expenseId, userId });
-        if (!expense) {
-            return res.status(404).json({ message: "Expense not found" });
-        }
-
-        // Update expense
-        expense.category = category;
-        expense.amount = amount;
-        expense.date = date;
-        expense.icon = icon;
-
-        await expense.save();
-
-        res.status(200).json({ message: "Expense updated successfully", expense });
-    } catch (error) {
-        console.error("Error updating expense:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-};
