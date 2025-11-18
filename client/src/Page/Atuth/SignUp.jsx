@@ -78,7 +78,7 @@ export default function SignUp() {
         <p className="text-gray-500 mt-[5px] mb-6">
           Join Us today by entering your details below.
         </p>
-        <form onSubmit={handleSingUp} className="flex flex-col">
+        <form onSubmit={handleSingUp} className="flex flex-col ">
           <ProfilePhtoSelecter image={profilePic} setImage={setProfilePic} />
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>

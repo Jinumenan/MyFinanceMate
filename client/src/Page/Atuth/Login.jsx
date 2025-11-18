@@ -69,38 +69,41 @@ export default function Login() {
                         Enter your credentials to login to your account
                     </p>
                     <div>
-                            <form onSubmit={handleLogin} className="flex flex-col">
-                                <Input 
-                                    label="Email Address"
-                                    type="email"
-                                    placeholder="john@example.com"
-                                    value={email}
-                                    onChange={({target}) => setEmail(target.value)}
-                                />
+                        <form onSubmit={handleLogin} className="flex flex-col">
+                            <Input 
+                                label="Email Address"
+                                type="email"
+                                placeholder="john@example.com"
+                                value={email}
+                                onChange={({target}) => setEmail(target.value)}
+                            />
 
-                                <Input
-                                    className="mt-4 p-4"
-                                    value={password}
-                                    onChange={({target}) => setPassword(target.value)}
-                                    label="Password"
-                                    placeholder="Min 8 characters"
-                                    type="password"
-                                />
-                                {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
-                                <button 
-                                    type="submit" 
-                                    className=" text-black border border-yellow-500 rounded-md py-2 mt-4 hover:bg-yellow-500 hover:text-white transition duration-200 ease-in-out" 
-                                    >
-                                        Login
-                                    </button>
+                            <Input
+                                className="mt-4 p-4"
+                                value={password}
+                                onChange={({target}) => setPassword(target.value)}
+                                label="Password"
+                                placeholder="Min 8 characters"
+                                type="password"
+                            />
+                            {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+                            <button 
+                                type="submit" 
+                                className=" text-black border border-yellow-500 rounded-md py-2 mt-4 hover:bg-yellow-500 hover:text-white transition duration-200 ease-in-out" 
+                            >
+                                Login
+                            </button>
 
-                                <p className="text-xs text-slate-700 mt-4">
-                                    Don't have an account? {" "}
-                                    <Link className="text-red-600 font-medium text-primary underline cursor-pointer" to = "/SignUp">
-                                        Sign Up
-                                    </Link>   
-                                </p>
-                            </form>
+                            <p className="text-xs text-slate-700 mt-4">
+                                Don't have an account? {" "}
+                                <Link className="text-red-600 font-medium text-primary underline cursor-pointer" to = "/SignUp">
+                                    Sign Up
+                                </Link>   
+                            </p>
+                            <div >
+                                <div className='bg-black'>d</div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 

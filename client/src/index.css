@@ -15,10 +15,11 @@
 }
 
 .add-btn-fill{
-    @apply text-white bg-yellow-500
+    @apply text-white bg-sky-800
 }
 
-.get-btn{
-    @apply bg-yellow-500 w-auto h-[40px] underline underline-offset-2 rounded-md pl-16 pr-16 text-black border py-2 mt-4 ml-2 hover:text-white transition duration-200 ease-in-out 
+.get-btn {
+  @apply bg-sky-800 hover:bg-sky-900 w-auto h-[40px] rounded-md px-16 text-white border border-transparent py-2 mt-4 ml-2
+     hover:text-white transition duration-200 ease-in-out;
 }
 

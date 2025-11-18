@@ -10,15 +10,16 @@ import Income from "./Page/Income";
 import Expense from "./Page/Expense";
 import ViewTransaction from "./Page/ViewTransaction";
 import Message from "./Page/Message";
-// import Income from "./Page/Income";
+import Service from "./Page/Service";
 
 
 function App() {
   const user = localStorage.getItem('token');
 
   return (
+
+
     <UserProvider>
-      <div>
         <BrowserRouter>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -29,11 +30,13 @@ function App() {
             <Route path="/expense" exact element = {<Expense/>} />
             <Route path="/viewtransaction" exact element = {<ViewTransaction/>} />
             <Route path="/message" exact element = {<Message/>} />
+            <Route path="/service" exact element = {<Service/>} />
             <Route path="*" element={<Navigate replace to="/signin" />} />
           </Routes>
         </BrowserRouter>
-      </div>
     </UserProvider>
+
+    
   );
 }
 
